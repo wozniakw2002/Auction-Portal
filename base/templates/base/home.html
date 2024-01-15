@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>Home Template</h1>
+
+<div>
+
+    <a href="{% url 'create-auction' %}">Create Auction</a>
+
+    <div>
+        {% for auction in auctions %}
+            <div>
+                <a href="{% url 'update-auction' auction.id %}">Edit</a>
+                <span>@{{auction.host.username}}</span>
+                <h5>{{auction.id}} -- <a href="{% url 'auction' auction.id %}">{{auction.name}}</a></h5>
+                <small>{{auction.start_price}}</small>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

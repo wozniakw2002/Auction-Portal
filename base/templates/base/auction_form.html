@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ auction_form.as_p }}
+        
+        {{ item_formset.management_form }}
+        {% for form in item_formset %}
+            {{ form.as_table }}
+        {% endfor %}
+
+        <input type="submit" value="Create Auction">
+    </form>
+</div>
+
+{% endblock %}
