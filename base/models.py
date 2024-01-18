@@ -15,8 +15,14 @@ class Item(models.Model):
     def __str__(self) -> str:
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length = 200)
+
+    def __str__(self) -> str:
+        return self.name
 class Auction(models.Model):
     host = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null = True)
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     start_price = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10000)])
@@ -47,3 +53,4 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return self.comment[0:50]
+

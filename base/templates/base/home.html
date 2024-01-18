@@ -1,22 +1,47 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1>Home Template</h1>
 
-<div>
-
-    <a href="{% url 'create-auction' %}">Create Auction</a>
+<div class="home-container">
 
     <div>
-        {% for auction in auctions %}
+        <h3>Auction Categories</h3>
+        <hr>
+
+        <div>
+            <a href="{% url 'home' %}">All</a>
+        </div>
+
+        {% for category in categories %}
+
             <div>
-                <a href="{% url 'update-auction' auction.id %}">Edit</a>
-                <span>@{{auction.host.username}}</span>
-                <h5>{{auction.id}} -- <a href="{% url 'auction' auction.id %}">{{auction.name}}</a></h5>
-                <small>{{auction.start_price}}</small>
-                <hr>
+                <a href="{% url 'home' %}?q={{category.name}}">{{category.name}}</a>
             </div>
+
         {% endfor %}
     </div>
+
+
+    <div>
+        <h5>{{auction_count}} auction available</h5>
+        <a href="{% url 'create-auction' %}">Create Auction</a>
+    
+
+        <div>
+            {% for auction in auctions %}
+                <div>
+                    <a href="{% url 'update-auction' auction.id %}">Edit</a>
+                    {% if auction.current_price == auction.start_price%}
+                    <a href="{% url 'delete-auction' auction.id %}">Delete</a>
+                    {% endif %}
+                    <span>@{{auction.host.username}}</span>
+                    <h5>{{auction.id}} -- <a href="{% url 'auction' auction.id %}">{{auction.name}}</a></h5>
+                    <small>{{auction.start_price}}</small>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
 </div>
 {% endblock content %}
