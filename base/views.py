@@ -1,16 +1,24 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from .models import Auction, Item, Category
 from .forms import AuctionForm, ItemFormSet, AuctionFormUpdate
 
 
 def loginPage(request):
 
+    page = 'login'
+
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == "POST":
-        username = request.POST.get('username')
+        username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
         try:
@@ -26,13 +34,32 @@ def loginPage(request):
         else:
             messages.error(request, 'Username or password is not valid.')
         
-    context = {}
+    context = {'page' : page}
     return render(request, 'base/login_register.html', context)
 
 
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
+def registerPage(request):
+    page = 'register'
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'An error occured during registration')
+
+    context = {'form': form, 'page': page}
+    return render(request, 'base/login_register.html', context)
+
 
 
 def home(request):
@@ -51,9 +78,12 @@ def home(request):
 
 def auction(request, id):
     auction = Auction.objects.get(id = id)
-    context = {'auction': auction}
+    comments = auction.comment_set.all().order_by('-created')
+
+    context = {'auction': auction, 'comments' : comments}
     return render(request, 'base/auction.html', context)
 
+@login_required(login_url='/login')
 def createAuction(request):
     if request.method == 'POST':
         auction_form = AuctionForm(request.POST)
@@ -72,10 +102,13 @@ def createAuction(request):
 
     return render(request, 'base/auction_form.html', {'auction_form': auction_form, 'item_formset': item_formset})
 
-
+@login_required(login_url='/login')
 def updateAuction(request, pk):
     auction = Auction.objects.get(id = pk)
     form = AuctionFormUpdate(instance=auction)
+
+    if request.user != auction.host:
+        return HttpResponse('You are not allowd do do it!')
 
     if request.method == 'POST':
         form = AuctionFormUpdate(request.POST, instance=auction)
@@ -86,8 +119,12 @@ def updateAuction(request, pk):
     context = {'auction_form': form}
     return render(request, 'base/auction_form.html', context)
 
+@login_required(login_url='/login')
 def deleteAuction(request, pk):
     auction = Auction.objects.get(id = pk)
+
+    if request.user != auction.host:
+        return HttpResponse('You are not allowd do do it!')
 
     if request.method == 'POST' and auction.current_price == auction.start_price:
         auction.delete()

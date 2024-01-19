@@ -2,4 +2,26 @@
 
 {% block content %}
 <h1> {{auction.name}} </h1>
+
+<p>{{auction.description}}</p>
+
+<div class="comment-wrapper">
+    <h3>Comments</h3>
+    <hr>
+
+    {% for comment in comments %}
+        <div>
+            <small>@{{comment.user}}  {{comment.created | timesince}} ago</small>
+            <p>{{comment.comment}}</p>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="comment-form">
+    <form action="POST" action = ''>
+        {%  %}
+    </form>
+
+</div>
 {% endblock content %}

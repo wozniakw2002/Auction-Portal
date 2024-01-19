@@ -30,9 +30,11 @@
         <div>
             {% for auction in auctions %}
                 <div>
-                    <a href="{% url 'update-auction' auction.id %}">Edit</a>
-                    {% if auction.current_price == auction.start_price%}
-                    <a href="{% url 'delete-auction' auction.id %}">Delete</a>
+                    {% if request.user == auction.host %}
+                        <a href="{% url 'update-auction' auction.id %}">Edit</a>
+                        {% if auction.current_price == auction.start_price%}
+                            <a href="{% url 'delete-auction' auction.id %}">Delete</a>
+                        {% endif %}
                     {% endif %}
                     <span>@{{auction.host.username}}</span>
                     <h5>{{auction.id}} -- <a href="{% url 'auction' auction.id %}">{{auction.name}}</a></h5>
