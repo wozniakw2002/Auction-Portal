@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from .models import Auction, Item, Category
-from .forms import AuctionForm, ItemFormSet, AuctionFormUpdate
+from .models import Auction, Category, Comment
+from .forms import AuctionForm, AuctionFormUpdate
 
 
 def loginPage(request):
@@ -79,28 +79,60 @@ def home(request):
 def auction(request, id):
     auction = Auction.objects.get(id = id)
     comments = auction.comment_set.all().order_by('-created')
+    
+    if request.method == 'POST':
+        comment_text = request.POST.get('comment')
+        bid_value = request.POST.get('bid')
+
+        if comment_text:
+            comment = Comment.objects.create(
+                user=request.user,
+                auction=auction,
+                comment=comment_text
+            )
+            return redirect('auction', id=auction.id)
+
+        if bid_value and int(bid_value) >= auction.min_bid + auction.current_price and int(bid_value) > auction.current_price and request.user != auction.host:
+            auction.current_price = int(bid_value)
+            auction.last_bid_user = request.user
+            auction.save()
+            return redirect('auction', id=auction.id)
+
+        else:
+            return HttpResponse('NO no no')
+       
 
     context = {'auction': auction, 'comments' : comments}
     return render(request, 'base/auction.html', context)
 
+def userProfile(request, pk):
+    user = User.objects.get(id = pk)
+    auctions = user.auction_set.all()
+    categories = Category.objects.all()
+    context = {'user': user, 'auctions': auctions, 'categories': categories}
+    return render(request, 'base/profile.html', context)
+
+@login_required
+def yourProfile(request, pk):
+    context = {}
+    return render(request, 'base/your_profile.html', context)
+
 @login_required(login_url='/login')
 def createAuction(request):
     if request.method == 'POST':
-        auction_form = AuctionForm(request.POST)
-        item_formset = ItemFormSet(request.POST, request.FILES, instance=Auction())
+        auction_form = AuctionForm(request.POST, request.FILES)
 
-        if auction_form.is_valid() and item_formset.is_valid():
-            auction = auction_form.save()
-            item_formset.instance = auction
-            item_formset.save()
+        if auction_form.is_valid():
+            auction_form = auction_form.save(commit=False)
+            auction_form.host = request.user
 
-            return redirect('home')  # Przekieruj gdziekolwiek chcesz po utworzeniu aukcji
+            auction_form.save()
+            return redirect('home') 
 
     else:
         auction_form = AuctionForm()
-        item_formset = ItemFormSet(instance=Auction())
-
-    return render(request, 'base/auction_form.html', {'auction_form': auction_form, 'item_formset': item_formset})
+    context = {'auction_form': auction_form}
+    return render(request, 'base/auction_form.html', context)
 
 @login_required(login_url='/login')
 def updateAuction(request, pk):

@@ -1,17 +1,11 @@
-from django.forms import ModelForm, inlineformset_factory
-from .models import Auction, Item
+from django.forms import ModelForm
+from .models import Auction
 
 class AuctionForm(ModelForm):
     class Meta:
         model = Auction
-        fields = ['name', 'category', 'description', 'start_price', 'min_bid', 'duration']
-
-class ItemForm(ModelForm):
-    class Meta:
-        model = Item
-        fields = ['name', 'picture']
-
-ItemFormSet = inlineformset_factory(Auction, Item, form=ItemForm, extra=1, can_delete=False)
+        fields = ['name', 'category', 'description', 
+                  'start_price', 'min_bid', 'duration', 'picture']
 
 class AuctionFormUpdate(ModelForm):
     class Meta:

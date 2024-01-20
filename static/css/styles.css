@@ -1,8 +1,146 @@
 .home-container{
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    position: relative;
+}
+
+.category-container{
+    position: absolute;
+    width: 10%;
+    left: 10%;
+}
+.category-container h3{
+    text-align: center;
+}
+
+.auctions-container{
+    position: absolute;
+    width: 70%;
+    left: 25%;
 }
 
 body{
-    background-color: lightgrey;
+    background-color: rgb(31, 1, 38);
+    margin: 0;
+    padding: 0;
+}
+
+.auction-container{
+    display: grid;
+}
+
+.profile-container{
+    display: grid;
+}
+
+.navbar{
+    position: relative;
+    background-color: rgb(21, 20, 20);
+    display: grid;
+    height: 6vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo{
+    height: 90%;
+    width: 5%;
+    background-color: rgb(21, 75, 14);
+    position: absolute;
+    left: 0%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border-radius: 20%;
+    color: white;
+}
+
+.auction-search{
+    height: 50%;
+    width: 20%;
+    position: absolute;
+    left: 40%;
+    margin: auto;
+    vertical-align: middle;
+    color: black;
+    text-align: center;
+    border-radius: 20%;
+    background-color: black;
+}
+
+.create-auction{
+    height: 90%;
+    width: 5%;
+    background-color: rgb(21, 75, 14);
+    position: absolute;
+    left: 82%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border-radius: 20%;
+    vertical-align: middle;
+    color: white;
+    text-decoration: wavy;
+    font-family: 'Trebuchet MS';
+    text-align: center;
+}
+.login{
+    height: 90%;
+    width: 5%;
+    background-color: rgb(21, 75, 14);
+    position: absolute;
+    left: 94%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border-radius: 20%;
+    color: white;
+    text-decoration: wavy;
+    font-family: 'Trebuchet MS';
+}
+
+.profile{
+    height: 90%;
+    width: 5%;
+    background-color: rgb(21, 75, 14);
+    position: absolute;
+    left: 88%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border-radius: 20%;
+    vertical-align: middle;
+    color: white;
+    text-decoration: wavy;
+    font-family: 'Trebuchet MS';
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(235, 229, 229);
+    font-size: large;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+h3{
+    color: white;
+}
+h5{
+    color: white;
+}
+
+.category-name{
+    font-family: 'Trebuchet MS';
+    height: 4vh;
 }

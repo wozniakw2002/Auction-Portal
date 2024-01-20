@@ -1,0 +1,17 @@
+<h3>Auction Categories</h3>
+<br>
+        <form method="GET" action="{% url 'home' %}">
+            <input type="text" name="q" placeholder="Search Auctions">
+        </form>
+        <br>
+        <div class="category-name">
+            <a href="{% url 'home' %}">All</a>
+        </div>
+
+        {% for category in categories %}
+
+            <div class="category-name">
+                <a href="{% url 'home' %}?q={{category.name}}">{{category.name}}</a>
+            </div>
+
+        {% endfor %}

@@ -1,15 +1,22 @@
-<a href = '/'>
-    <h1>LOGO</h1>
-</a>
+<div class="navbar">
+    <div class="logo">
+        <a href = '/'>
+        <h1>LOGO</h1>
+        </a>
+    </div>
 
-<form method="GET" action="{% url 'home' %}">
-    <input type="text" name="q" placeholder="Search Auctions">
-</form>
+<div class="create-auction">
+    <a href="{% url 'create-auction' %}">Create Auction</a>
+</div>
 
+<div class="profile">
+    <a href="{% url 'your-profile' %}">Your Profile</a>
+</div>
+<div class="login">
 {% if request.user.is_authenticated %}
-    <p>Hello {{request.user.username}}</p>
     <a href="{% url 'logout' %}">Logout</a>
 {% else %}
     <a href="{% url 'login' %}">Login</a>
 {% endif %}
-<hr>
+</div>
+</div>

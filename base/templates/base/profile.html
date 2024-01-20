@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+<h1>{{user.username}}</h1>
+
+<div class="profile-container">
+    <div>
+        {% include 'base/category_component.html' %}
+    </div>
+    <div>
+        {% include 'base/auction_component.html' %}
+    </div>
+    <div>
+        
+    </div>
+</div>
+
+{% endblock content %}
