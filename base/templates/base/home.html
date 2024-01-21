@@ -10,8 +10,13 @@
 
 
     <div class="auctions-container">
-        <h5>{{auction_count}} auction available</h5>
-        
+        <div class="auction-title">
+        <h3>Available auctions ({{auction_count}})</h3>
+        <form method="GET" action="{% url 'home' %}">
+            <input type="text" name="q" placeholder="Search Auctions" class="search-bar">
+        </form>
+        </div>
+        <hr>
     
 
         <div>

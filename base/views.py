@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Auction, Category, Comment
 from .forms import AuctionForm, AuctionFormUpdate
+from django.utils import timezone
+
 
 
 def loginPage(request):
@@ -65,9 +67,10 @@ def registerPage(request):
 def home(request):
     
     query = request.GET.get('q') if request.GET.get('q') != None else ''
+    now = timezone.now()
     auctions = Auction.objects.filter(Q(category__name__icontains = query) |
                                       Q(name__icontains = query) |
-                                      Q(description__icontains = query))
+                                      Q(description__icontains = query)).filter(duration__gt=now)
     categories = Category.objects.all()
 
     auction_count = auctions.count()
@@ -93,29 +96,40 @@ def auction(request, id):
             return redirect('auction', id=auction.id)
 
         if bid_value and int(bid_value) >= auction.min_bid + auction.current_price and int(bid_value) > auction.current_price and request.user != auction.host:
-            auction.current_price = int(bid_value)
-            auction.last_bid_user = request.user
-            auction.save()
-            return redirect('auction', id=auction.id)
+            if auction.duration <= timezone.now():
+                return HttpResponse('This auction is not valid anymore')
+            else:
+                auction.current_price = int(bid_value)
+                auction.last_bid_user = request.user
+                auction.save()
+                return redirect('auction', id=auction.id)
 
         else:
-            return HttpResponse('NO no no')
+            return HttpResponse('Your bid value is not correct')
        
 
     context = {'auction': auction, 'comments' : comments}
     return render(request, 'base/auction.html', context)
 
-def userProfile(request, pk):
+
+@login_required(login_url='/login')
+def yourProfile(request, pk):
     user = User.objects.get(id = pk)
     auctions = user.auction_set.all()
-    categories = Category.objects.all()
-    context = {'user': user, 'auctions': auctions, 'categories': categories}
-    return render(request, 'base/profile.html', context)
+    won_auctions = Auction.objects.filter(has_ended=True).filter(last_bid_user_id = user.id)
+    for auction in auctions:
+        if auction.duration <= timezone.now():
+            auction.has_ended = True
+            auction.save()
 
-@login_required
-def yourProfile(request, pk):
-    context = {}
-    return render(request, 'base/your_profile.html', context)
+    if request.user != user:
+        return HttpResponse("You cannot see that profile.")
+    auctions_active = auctions.filter(has_ended=False)
+    auctions_disactive = auctions.filter(has_ended=True)
+    print(auctions_active)
+    context = {'user' : user, 'active': auctions_active, 
+               'disactive': auctions_disactive, 'won_auctions': won_auctions}
+    return render(request, 'base/your-profile.html', context)
 
 @login_required(login_url='/login')
 def createAuction(request):
@@ -125,6 +139,7 @@ def createAuction(request):
         if auction_form.is_valid():
             auction_form = auction_form.save(commit=False)
             auction_form.host = request.user
+            auction_form.duration = request.POST['duration']
 
             auction_form.save()
             return redirect('home') 
@@ -149,7 +164,7 @@ def updateAuction(request, pk):
             return redirect('home')
 
     context = {'auction_form': form}
-    return render(request, 'base/auction_form.html', context)
+    return render(request, 'base/auction_form_update.html', context)
 
 @login_required(login_url='/login')
 def deleteAuction(request, pk):

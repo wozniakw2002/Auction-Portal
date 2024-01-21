@@ -6,10 +6,8 @@
     <form method="post" enctype="multipart/form-data" class="create-auction-form">
         {% csrf_token %}
         {{ auction_form.as_p }}
-        <label for="duration">Duration</label>
-        <input type="datetime-local" id="duration" name="duration", required>
         <br>
-        <input type="submit" value="Create Auction">
+        <input type="submit" value="Update Auction">
     </form>
 </div>
 

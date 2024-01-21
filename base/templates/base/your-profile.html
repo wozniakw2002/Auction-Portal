@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+<div class="profile-wrapper">
+    <div class="auctions-active">
+        <h3>Active Auctions</h3>
+    {% for auction in active %}
+    <div class="auction-active">
+        <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
+        Category: {{auction.category}}
+        <br>
+                    
+        <medium>Current price: {{auction.current_price}}$</medium>
+     
+
+    {% if request.user == auction.host %}
+    <div class="edit-active">
+        <a href="{% url 'update-auction' auction.id %}">Edit</a>
+    </div>
+        {% if auction.current_price == auction.start_price%}
+        <div class="delete-active">
+            <a href="{% url 'delete-auction' auction.id %}">Delete</a>
+        </div>
+        {% endif %}
+    {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<div class="profile-info">
+    <h3>Profile info</h3>
+    <p>Username: {{user.username}}</p>
+    <p>First name: {{user.name}}</p>
+    <p>Last name: {{user.name}}</p>
+    <p>E-mail: {{user.email}}</p>
+    <p>Bank account: {{user.bank}}</p>
+</div>
+
+<div class="won-auctions">
+    <h3>Won auctions</h3>
+    {% for auction in won_auctions %}
+        <div class="won-auction">
+            <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
+            Price: {{auction.current_price}}$ <br>
+            Bank_account: {{auction.host.bank}}
+        </div>
+    {% endfor %}
+</div>
+</div>
+
+<div class="auctions-disactive">
+    <h3>
+        Auctions ended</h3>
+    {% for auction in disactive %}
+    <div class="auction-disactive">
+        <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
+        Category: {{auction.category}}
+        <br>
+                    
+        <medium>Current price: {{auction.current_price}}$</medium>
+    </div>
+
+{% endfor %}
+</div>
+{% endblock content %}

@@ -5,7 +5,7 @@ class AuctionForm(ModelForm):
     class Meta:
         model = Auction
         fields = ['name', 'category', 'description', 
-                  'start_price', 'min_bid', 'duration', 'picture']
+                  'start_price', 'min_bid', 'picture']
 
 class AuctionFormUpdate(ModelForm):
     class Meta:

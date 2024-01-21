@@ -1,15 +1,30 @@
-{% for auction in auctions %}
-                <div>
-                    {% if request.user == auction.host %}
-                        <a href="{% url 'update-auction' auction.id %}">Edit</a>
-                        {% if auction.current_price == auction.start_price%}
-                            <a href="{% url 'delete-auction' auction.id %}">Delete</a>
-                        {% endif %}
-                    {% endif %}
 
-                    <a href="{% url 'user-profile' auction.host.id %}">@{{auction.host.username}}</a>
-                    <h5>{{auction.id}} -- <a href="{% url 'auction' auction.id %}">{{auction.name}}</a></h5>
-                    <small>{{auction.start_price}}</small>
-                    <hr>
+{% for auction in auctions %}
+
+                <div class="auction-summary">
+                    <img src="{{auction.picture}}" alt="">
+                    <div class="auctions-details">
+                    <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
+
+                 
+
+                    Host: {{auction.host.username}} <br>
+                    Category: {{auction.category}}
+                    <br>
+                    
+                    <medium>Current price: {{auction.current_price}}$</medium>
                 </div>
+
+                {% if request.user == auction.host %}
+                <div class="edit">
+                    <a href="{% url 'update-auction' auction.id %}">Edit</a>
+                </div>
+                    {% if auction.current_price == auction.start_price%}
+                    <div class="delete">
+                        <a href="{% url 'delete-auction' auction.id %}">Delete</a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+                </div>
+
 {% endfor %}

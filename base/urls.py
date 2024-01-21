@@ -8,11 +8,10 @@ urlpatterns = [
 
     path('', views.home, name='home'),
     path('auction/<str:id>/', views.auction, name='auction'),
-    path('profile/<str:pk>/', views.userProfile, name='user-profile'),
     
     path('create-auction/', views.createAuction, name='create-auction'),
     path('update-auction/<str:pk>/', views.updateAuction, name='update-auction'),
     path('delete-auction/<str:pk>/', views.deleteAuction, name='delete-auction'),
 
-    path('your_profile',views.yourProfile , name='your-profile')
+    path('your-profile/<str:pk>/',views.yourProfile , name='your-profile')
 ]

@@ -1,7 +1,7 @@
 <div class="navbar">
     <div class="logo">
         <a href = '/'>
-        <h1>LOGO</h1>
+        Home Page
         </a>
     </div>
 
@@ -10,7 +10,7 @@
 </div>
 
 <div class="profile">
-    <a href="{% url 'your-profile' %}">Your Profile</a>
+    <a href="{% url 'your-profile'  user.id%}">Your Profile</a>
 </div>
 <div class="login">
 {% if request.user.is_authenticated %}
