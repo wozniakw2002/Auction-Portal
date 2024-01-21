@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase, TestCase, Client
 from django.urls import reverse, resolve
 from .views import home, createAuction, auction, updateAuction
-from .models import Auction, Comment, Item
+from .models import Auction, Comment
 import json
 class TestUrls(SimpleTestCase):
 

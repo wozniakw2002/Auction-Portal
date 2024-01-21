@@ -5,15 +5,6 @@ import datetime
 from datetime import timedelta
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-# Create your models here.
-
-class Item(models.Model):
-    name = models.CharField(max_length=200)
-    auction = models.ForeignKey('Auction', on_delete=models.SET_NULL, null=True)
-    picture = models.ImageField()
-
-    def __str__(self) -> str:
-        return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length = 200)
@@ -32,6 +23,9 @@ class Auction(models.Model):
     duration = models.DateTimeField(default=datetime.datetime.now() + timedelta(days=7))
     has_ended = models.BooleanField(default=False, editable=False)
     current_price = models.IntegerField(editable=False, default=1)
+    picture = models.ImageField(upload_to='static/images/')
+    last_bid_user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, 
+                                      related_name ='last_bids', editable=False)
 
     def save(self, *args, **kwargs):
         if not self.id:

@@ -1,0 +1,30 @@
+
+{% for auction in auctions %}
+
+                <div class="auction-summary">
+                    <img src="{{auction.picture}}" alt="">
+                    <div class="auctions-details">
+                    <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
+
+                 
+
+                    Host: {{auction.host.username}} <br>
+                    Category: {{auction.category}}
+                    <br>
+                    
+                    <medium>Current price: {{auction.current_price}}$</medium>
+                </div>
+
+                {% if request.user == auction.host %}
+                <div class="edit">
+                    <a href="{% url 'update-auction' auction.id %}">Edit</a>
+                </div>
+                    {% if auction.current_price == auction.start_price%}
+                    <div class="delete">
+                        <a href="{% url 'delete-auction' auction.id %}">Delete</a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+                </div>
+
+{% endfor %}

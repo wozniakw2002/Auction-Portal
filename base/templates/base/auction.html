@@ -1,5 +1,63 @@
 {% extends 'main.html' %}
 
 {% block content %}
+
+
+<div class="auction-container">
+<div class="auction-wrapper">
+    <div class="auction-details">
 <h1> {{auction.name}} </h1>
+<p>Category: {{auction.category}}</p>
+<p>Host: {{auction.host}}</p>
+<p>Duration: {{auction.duration}}</p>
+<p>Last user: {{auction.last_bid_user}}</p>
+ 
+</div>
+<img src="/{{auction.picture}}" alt="">
+</div>
+
+
+
+<div class="bid-container">
+    <h3>Make a bid.</h3>
+    <p>Starting price: {{auction.start_price}}$</p>
+    <p>Current price: {{auction.current_price}}$</p>
+    <p>Min bid: {{auction.min_bid}}$</p>
+    {% if request.user.is_authenticated %}
+    <form method='POST'>
+        {% csrf_token %}
+
+        <input type="number" name="bid" placeholder="Make a bid">
+        <input type="submit" value="Bid">
+    </form>
+    {% endif %}
+</div>
+</div>
+<div class="desc">
+<h3>Description:</h3>
+<p>{{auction.description}}</p>
+</div>
+<div class="comment-wrapper">
+    <h3>Comments</h3>
+    <hr>
+
+    {% for comment in comments %}
+        <div class="comment">
+            <small>{{comment.user}}  {{comment.created | timesince}} ago</small>
+            <p>{{comment.comment}}</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% if request.user.is_authenticated %}
+<div class="comment-form">
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="comment" placeholder="Write your comment here..", class="com-for">
+    </form>
+
+</div>
+
+{% endif %}
 {% endblock content %}
