@@ -2,12 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.db.models import Q
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from .models import Auction, Category, Comment
-from .forms import AuctionForm, AuctionFormUpdate
+from .models import Auction, Category, Comment, User
+from .forms import AuctionForm, AuctionFormUpdate, RegistrationForm
 from django.utils import timezone
 
 
@@ -46,10 +45,10 @@ def logoutUser(request):
 
 def registerPage(request):
     page = 'register'
-    form = UserCreationForm()
+    form = RegistrationForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()

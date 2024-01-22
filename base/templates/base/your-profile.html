@@ -31,16 +31,17 @@
 <div class="profile-info">
     <h3>Profile info</h3>
     <p>Username: {{user.username}}</p>
-    <p>First name: {{user.name}}</p>
-    <p>Last name: {{user.name}}</p>
+    <p>First name: {{user.first_name}}</p>
+    <p>Last name: {{user.last_name}}</p>
     <p>E-mail: {{user.email}}</p>
-    <p>Bank account: {{user.bank}}</p>
+    <p>Bank account: {{user.bank_account}}</p>
 </div>
 
 <div class="won-auctions">
     <h3>Won auctions</h3>
     {% for auction in won_auctions %}
         <div class="won-auction">
+            ID: {{auction.id}} <br>
             <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
             Price: {{auction.current_price}}$ <br>
             Bank_account: {{auction.host.bank}}
@@ -54,6 +55,7 @@
         Auctions ended</h3>
     {% for auction in disactive %}
     <div class="auction-disactive">
+        ID: {{auction.id}} <br>
         <span class="auction-name">Title: <a href="{% url 'auction' auction.id %}">{{auction.name}}</a> </span><br>
         Category: {{auction.category}}
         <br>

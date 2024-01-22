@@ -301,6 +301,7 @@ textarea {
 
 .login-container form {
     max-width: 400px;
+    min-width: 400px;
     background-color: #fff;
     padding: 30px;
     border: 1px solid #ddd;
@@ -362,6 +363,10 @@ textarea {
 }
 .errorlist{
     color: #fff;
+}
+
+.login-container .errorlist{
+    color: black;
 }
 
 .comment-wrapper{
@@ -495,7 +500,7 @@ textarea {
 }
 .profile-info{
     position: absolute;
-    left: 80%;
+    left: 70%;
 }
 .won-auctions{
     position: absolute;
